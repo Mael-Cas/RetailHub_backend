@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  app:
+    build: .
+    environment:
+      DB_HOST: db
+      API_KEY: ''
+    restart: always
+    ports:
+      - '10011:10011'
+  db:
+    image: mongo
+    restart: always
+    ports:
+      - '27017:27017'

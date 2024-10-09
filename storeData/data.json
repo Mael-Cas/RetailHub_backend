@@ -1,0 +1,282 @@
+{
+  "PROD001": {
+    "current_level": 524,
+    "reorder_level": 5
+  },
+  "PROD002": {
+    "current_level": 419,
+    "reorder_level": 10
+  },
+  "PROD003": {
+    "current_level": 497,
+    "reorder_level": 5
+  },
+  "PROD004": {
+    "current_level": 413,
+    "reorder_level": 20
+  },
+  "PROD005": {
+    "current_level": 420,
+    "reorder_level": 10
+  },
+  "PROD006": {
+    "current_level": 412,
+    "reorder_level": 20
+  },
+  "PROD007": {
+    "current_level": 412,
+    "reorder_level": 5
+  },
+  "PROD008": {
+    "current_level": 420,
+    "reorder_level": 10
+  },
+  "PROD009": {
+    "current_level": 395,
+    "reorder_level": 15
+  },
+  "PROD010": {
+    "current_level": 417,
+    "reorder_level": 15
+  },
+  "PROD011": {
+    "current_level": 438,
+    "reorder_level": 5
+  },
+  "PROD012": {
+    "current_level": 399,
+    "reorder_level": 10
+  },
+  "PROD013": {
+    "current_level": 434,
+    "reorder_level": 8
+  },
+  "PROD014": {
+    "current_level": 403,
+    "reorder_level": 2
+  },
+  "PROD015": {
+    "current_level": 422,
+    "reorder_level": 5
+  },
+  "PROD016": {
+    "current_level": 443,
+    "reorder_level": 5
+  },
+  "PROD017": {
+    "current_level": 400,
+    "reorder_level": 10
+  },
+  "PROD018": {
+    "current_level": 412,
+    "reorder_level": 3
+  },
+  "PROD019": {
+    "current_level": 372,
+    "reorder_level": 20
+  },
+  "PROD020": {
+    "current_level": 427,
+    "reorder_level": 15
+  },
+  "PROD021": {
+    "current_level": 426,
+    "reorder_level": 5
+  },
+  "PROD022": {
+    "current_level": 416,
+    "reorder_level": 19
+  },
+  "PROD023": {
+    "current_level": 406,
+    "reorder_level": 10
+  },
+  "PROD024": {
+    "current_level": 431,
+    "reorder_level": 20
+  },
+  "PROD025": {
+    "current_level": 403,
+    "reorder_level": 7
+  },
+  "PROD026": {
+    "current_level": 421,
+    "reorder_level": 9
+  },
+  "PROD027": {
+    "current_level": 411,
+    "reorder_level": 18
+  },
+  "PROD028": {
+    "current_level": 428,
+    "reorder_level": 17
+  },
+  "PROD029": {
+    "current_level": 409,
+    "reorder_level": 18
+  },
+  "PROD030": {
+    "current_level": 417,
+    "reorder_level": 16
+  },
+  "PROD031": {
+    "current_level": 427,
+    "reorder_level": 14
+  },
+  "PROD032": {
+    "current_level": 379,
+    "reorder_level": 10
+  },
+  "PROD033": {
+    "current_level": 431,
+    "reorder_level": 13
+  },
+  "PROD034": {
+    "current_level": 403,
+    "reorder_level": 8
+  },
+  "PROD035": {
+    "current_level": 420,
+    "reorder_level": 9
+  },
+  "PROD036": {
+    "current_level": 427,
+    "reorder_level": 15
+  },
+  "PROD037": {
+    "current_level": 417,
+    "reorder_level": 6
+  },
+  "PROD038": {
+    "current_level": 424,
+    "reorder_level": 17
+  },
+  "PROD039": {
+    "current_level": 419,
+    "reorder_level": 15
+  },
+  "PROD040": {
+    "current_level": 407,
+    "reorder_level": 20
+  },
+  "PROD041": {
+    "current_level": 420,
+    "reorder_level": 9
+  },
+  "PROD042": {
+    "current_level": 416,
+    "reorder_level": 9
+  },
+  "PROD043": {
+    "current_level": 412,
+    "reorder_level": 8
+  },
+  "PROD044": {
+    "current_level": 436,
+    "reorder_level": 11
+  },
+  "PROD045": {
+    "current_level": 415,
+    "reorder_level": 6
+  },
+  "PROD046": {
+    "current_level": 381,
+    "reorder_level": 6
+  },
+  "PROD047": {
+    "current_level": 419,
+    "reorder_level": 9
+  },
+  "PROD048": {
+    "current_level": 407,
+    "reorder_level": 6
+  },
+  "PROD049": {
+    "current_level": 383,
+    "reorder_level": 20
+  },
+  "PROD050": {
+    "current_level": 389,
+    "reorder_level": 10
+  },
+  "PROD051": {
+    "current_level": 426,
+    "reorder_level": 17
+  },
+  "PROD052": {
+    "current_level": 420,
+    "reorder_level": 9
+  },
+  "PROD053": {
+    "current_level": 405,
+    "reorder_level": 16
+  },
+  "PROD054": {
+    "current_level": 390,
+    "reorder_level": 9
+  },
+  "PROD055": {
+    "current_level": 407,
+    "reorder_level": 11
+  },
+  "PROD056": {
+    "current_level": 428,
+    "reorder_level": 17
+  },
+  "PROD057": {
+    "current_level": 397,
+    "reorder_level": 19
+  },
+  "PROD058": {
+    "current_level": 406,
+    "reorder_level": 9
+  },
+  "PROD059": {
+    "current_level": 419,
+    "reorder_level": 15
+  },
+  "PROD060": {
+    "current_level": 440,
+    "reorder_level": 7
+  },
+  "PROD061": {
+    "current_level": 432,
+    "reorder_level": 20
+  },
+  "PROD062": {
+    "current_level": 406,
+    "reorder_level": 16
+  },
+  "PROD063": {
+    "current_level": 401,
+    "reorder_level": 17
+  },
+  "PROD064": {
+    "current_level": 434,
+    "reorder_level": 7
+  },
+  "PROD065": {
+    "current_level": 416,
+    "reorder_level": 13
+  },
+  "PROD066": {
+    "current_level": 408,
+    "reorder_level": 15
+  },
+  "PROD067": {
+    "current_level": 413,
+    "reorder_level": 16
+  },
+  "PROD068": {
+    "current_level": 373,
+    "reorder_level": 18
+  },
+  "PROD069": {
+    "current_level": 428,
+    "reorder_level": 19
+  },
+  "PROD070": {
+    "current_level": 413,
+    "reorder_level": 7
+  }
+}
