@@ -48,25 +48,34 @@ function CreateData(nFdata){
             const sku_id = item.sku;
             const why = item.why;
 
-            Product.find({sku_id: sku_id})
+            AlertR.findOne({ref_product: sku_id, resolve:false})
                 .then((res)=>{
-                    const currentlvl = res.Current_stock;
 
-                    const newAlert = new AlertR({
 
-                        ref_product: sku_id,
-                        current_level: currentlvl,
-                        reason: why,
+                    if(!res){
+                        Product.find({sku_id: sku_id})
+                            .then((res)=>{
+                                const currentlvl = res.Current_stock;
 
-                    })
-                    newAlert.save()
-                        .then(()=>{
-                            console.log('created success')})
-                        .catch(error => console.log(error));
+                                const newAlert = new AlertR({
+
+                                    ref_product: sku_id,
+                                    current_level: currentlvl,
+                                    reason: why,
+
+                                })
+                                newAlert.save()
+                                    .then(()=>{
+                                        console.log('created success')})
+                                    .catch(error => console.log(error));
+                            })
+                            .catch(error => {
+                                console.log(error)});
+                    }
+
                 })
-                .catch(error => {
-                    console.log(error)});
-
+                .catch(err=>{
+                    console.log(err)})
 
 
         }
