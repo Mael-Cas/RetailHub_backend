@@ -7,6 +7,7 @@ const router = express.Router();
 
 
 
+
 router.get('/', ProductCtrl.GetAllProducts);
 router.get('/:sku', ProductCtrl.GetOneProduct);
 router.post('/', ProductCtrl.CreateProduct);

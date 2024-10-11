@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 /**
  * Retrieves all users from the database.
@@ -88,3 +89,30 @@ exports.DeleteUser = (req, res, next) => {
         .catch(error => res.status(400).json(error));
 };
 
+exports.Login = (req, res)=>{
+    const email = req.body.email;
+    const password = req.body.password;
+
+    console.log(email, password)
+
+    User.findOne({ email })
+        .then(user => {
+            console.log(user)
+            bcrypt.compare(password, user.password)
+                .then(valid => {
+                    console.log(valid)
+                    if (!valid) {
+                        res.status(401).json({ message: 'User login failed.' });
+
+                    }else{
+                        res.status(201).json({
+                            userId: user._id,
+                            userRole: user.role,
+                            token: jwt.sign({userId: user._id, roles: user.role}, 'TOKEN', {expiresIn: '24h'})
+                        });
+                    }
+                })
+        })
+        .catch(error => res.status(400).json(error));
+
+}
