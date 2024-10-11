@@ -1,11 +1,14 @@
 const express = require('express');
 const UserCtrl = require('../controllers/User');
 const CustomerCtrl = require("../controllers/User");
+const auth = require('../middleware/Authentification');
+
 
 const router = express.Router();
 
 
-
+router.use(auth.Auth);
+router.use(auth.admin);
 
 router.get('/', UserCtrl.GetAllUsers);
 router.get('/:id', UserCtrl.GetOneUser);
