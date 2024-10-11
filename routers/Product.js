@@ -13,7 +13,7 @@ router.use(auth.Auth);
 router.get('/', auth.user,ProductCtrl.GetAllProducts);
 router.get('/:sku', auth.user,ProductCtrl.GetOneProduct);
 router.post('/', auth.admin,ProductCtrl.CreateProduct);
-router.put('/:sku', auth.admin,ProductCtrl.UpdateProduct);
+router.put('/:sku', auth.user,ProductCtrl.UpdateProduct);
 router.delete('/:sku', auth.admin,ProductCtrl.DeleteProduct);
 
 module.exports = router;
