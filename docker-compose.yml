@@ -4,7 +4,7 @@ services:
     build: .
     environment:
       DB_HOST: db
-      API_KEY: ''
+      API_KEY: '' #Put your AI token here
     restart: always
     ports:
       - '10011:10011'
