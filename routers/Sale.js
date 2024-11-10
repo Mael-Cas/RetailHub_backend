@@ -7,10 +7,10 @@ const router = express.Router();
 
 router.use(auth.Auth);
 
-router.get('/', auth.user, SaleCtrl.GetAllSales);
-router.get('/:id', auth.user,SaleCtrl.GetOneSale);
-router.post('/', auth.user ,SaleCtrl.CreateSale);
-router.put('/:id', auth.user ,SaleCtrl.UpdateSale);
-router.delete('/:id', auth.user, SaleCtrl.DeleteSale);
+router.get('/', SaleCtrl.GetAllSales);
+router.get('/:id',SaleCtrl.GetOneSale);
+router.post('/',SaleCtrl.CreateSale);
+router.put('/:id',SaleCtrl.UpdateSale);
+router.delete('/:id', SaleCtrl.DeleteSale);
 
 module.exports = router;

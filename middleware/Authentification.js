@@ -1,3 +1,5 @@
+const User = require('../models/User')
+
 const jwt = require('jsonwebtoken')
 
 exports.Auth = (req, res, next) => {
@@ -18,17 +20,34 @@ exports.Auth = (req, res, next) => {
     }
 }
 
-exports.admin = (req, res, next) => {
-    if (req.auth.role !== 'ADMIN') {
-        return res.status(403).json({ message: 'Accès interdit : Admin requis' });
-    }
-    next(); // Si l'utilisateur est admin, on passe au middleware suivant
-};
+exports.Permission = (resource, field, action) => async (req, res, next) => {
+    try {
+        const user = await User.findById(req.userId).populate('roles');
+        const organizationId = req.shopId;
 
-// Middleware pour les routes utilisateur
-exports.user = (req, res, next) => {
-    if (req.auth.role !== 'USER' && req.auth.role !== 'ADMIN') {
-        return res.status(403).json({ message: 'Accès interdit : Utilisateur requis' });
+        if (!user || user.storeID.toString() !== organizationId.toString()) {
+            return res.status(403).json({ message: 'Unauthorized access.' });
+        }
+
+        let isAuthorized = false;
+
+        user.roles.forEach(role => {
+            if (role.organizationId.toString() === organizationId.toString()) {
+                role.permissions.forEach(perm => {
+                    if (perm.resource === resource) {
+                        const fieldPermission = perm.actions.find(a => a.field === field && a.permission === action);
+                        if (fieldPermission) isAuthorized = true;
+                    }
+                });
+            }
+        });
+
+        if (!isAuthorized) {
+            return res.status(403).json({ message: 'Insufficient permissions for this field.' });
+        }
+
+        next();
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
     }
-    next(); // Si l'utilisateur est user ou admin, on passe au middleware suivant
 };

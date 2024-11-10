@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.use(auth.Auth);
 
-router.get('/', auth.user,CategoryCtrl.GetAllCategories);
-router.post('/', auth.user,CategoryCtrl.CreateCategory);
-router.delete('/:id', auth.user,CategoryCtrl.DeleteCategory);
+router.get('/',CategoryCtrl.GetAllCategories);
+router.post('/',CategoryCtrl.CreateCategory);
+router.delete('/:id',CategoryCtrl.DeleteCategory);
 
 module.exports = router;

@@ -9,7 +9,7 @@ const ProductRouter = require('./routers/Product');
 const CategoryRouter = require('./routers/Category');
 
 
-mongoose.connect(`mongodb://${process.env.DB_HOST}:27017/decathlon`)
+mongoose.connect(`mongodb://127.0.0.1:27017/testRetail`)
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 

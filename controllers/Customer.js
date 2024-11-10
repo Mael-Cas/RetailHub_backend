@@ -1,4 +1,5 @@
 const Customer = require('../models/Customer');
+const Addres = require('../models/Address');
 
 /**
  * Retrieves all customers from the database.
@@ -9,7 +10,10 @@ const Customer = require('../models/Customer');
  * @returns {void} Sends a JSON response with all customers or an error message.
  */
 exports.GetAllCustomers = (req, res, next) => {
-    Customer.find()
+
+    const limit = req.params.lmt ? req.params.lmt : 0;
+
+    Customer.find().limit(limit).populate('address')
         .then(customer => res.status(200).json(customer))
         .catch(error => res.status(500).json(error));
 
@@ -42,13 +46,40 @@ exports.GetOneCustomer = (req, res, next) => {
  */
 exports.CreateCustomer = (req, res, next) => {
 
+    const {street_Number, street, city, state, country, countryCode} = req.body;
+
+    delete req.street_Number;
+    delete req.street;
+    delete req.city;
+    delete req.state;
+    delete req.country;
+    delete req.countryCode;
+
     delete req.body._id;
-    const customer = new Customer({
-        ...req.body,
+
+
+    const newAddress = new Addres({
+        street_Number,
+        street,
+        city,
+        state,
+        country,
+        countryCode,
     });
-    customer.save()
-        .then(()=>res.status(201).json({message: 'Customer saved successfully.'}))
-        .catch(error => res.status(400).json({message: 'Server error', error: error.message }));
+    newAddress.save()
+        .then(address => {
+            const customer = new Customer({
+                ...req.body,
+                address: address._id,
+            });
+            customer.save()
+                .then(()=>res.status(201).json({message: 'Customer saved successfully.'}))
+                .catch(error => res.status(400).json({message: 'Server error', error: error.message }));
+    });
+
+
+
+
 
 };
 
@@ -76,10 +107,20 @@ exports.UpdateCustomer = (req, res, next) => {
  * @param {Function} next - Express next middleware function.
  * @returns {void} Sends a JSON response with a success message or an error message.
  */
-exports.DeleteCustomer = (req, res, next) => {
+exports.DeleteCustomer = async (req, res, next) => {
 
-    Customer.deleteOne({ _id: req.params.id })
-        .then(()=>res.status(204).json({message :"delete succesfully"}))
-        .catch(error => res.status(404).json({ message: 'Server error', error: error.message }))
+    try {
+        // Trouver le client à supprimer
+        const customer = await Customer.findOne({_id:req.params.id});
+        if (!customer) {
+            return res.status(404).json({ message: 'Customer not found.' });
+        }
 
+        // Supprimer le client, ce qui déclenche le middleware pour supprimer l'adresse associée
+        await customer.remove();
+
+        res.status(200).json({ message: 'Customer and associated address deleted successfully.' });
+    } catch (error) {
+        res.status(400).json({ message: 'Server error', error: error.message });
+    }
 };

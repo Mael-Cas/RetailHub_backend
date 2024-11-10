@@ -8,11 +8,11 @@ const router = express.Router();
 
 
 
-router.get('/', auth.Auth,auth.admin,UserCtrl.GetAllUsers);
-router.get('/:id', auth.Auth,auth.admin,UserCtrl.GetOneUser);
-router.post('/', auth.Auth,auth.admin,UserCtrl.CreateUser);
-router.put('/:id',auth.Auth, auth.admin,UserCtrl.UpdateUser);
-router.delete('/:id',auth.Auth, auth.admin,UserCtrl.DeleteUser);
+router.get('/',UserCtrl.GetAllUsers);
+router.get('/:id',UserCtrl.GetOneUser);
+router.post('/',UserCtrl.CreateUser);
+router.put('/:id',UserCtrl.UpdateUser);
+router.delete('/:id',UserCtrl.DeleteUser);
 
 router.post('/login', CustomerCtrl.Login);
 

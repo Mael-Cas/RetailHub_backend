@@ -37,8 +37,9 @@ const SalesSchema = mongoose.Schema({
         type: String,
         enum: ['Cash', 'Credit Card', 'Bank Transfer', 'PayPal']
     }, // Méthode de paiement utilisée
-    soldBy: { type: String, ref: 'User' },
-    is_invoiced: { type: Boolean, default: false }          // Indique si la vente a été transformée en facture
+    soldBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    is_invoiced: { type: Boolean, default: false },          // Indique si la vente a été transformée en facture
+    shopId : {type: mongoose.Schema.Types.ObjectId, ref: 'Store' },
 });
 
 module.exports = mongoose.model('Sales', SalesSchema);

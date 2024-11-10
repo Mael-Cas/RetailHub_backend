@@ -1,4 +1,30 @@
-const Product = require('../models/Product');
+const Product = require('../models/Product')
+const StoreProduct = require('../models/StoreProduct');
+const mongoose = require("mongoose");
+
+
+
+async function GetProductBySKU(SKU) {
+    Product.findOne({ SKU: SKU })
+        .then(product => {
+
+            if(!product) {
+                return null
+            }else{
+
+                StoreProduct.findOne({product: product._id}).populate('product')
+                    .then(product => {
+                        return product;
+                    })
+
+            }
+        })
+        .catch(error => {
+            throw new Error(`An error occurred while finding StoreProduct by SKU: ${error.message}`)
+        });
+}
+
+
 
 /**
  * Retrieves all products from the database.
@@ -9,7 +35,9 @@ const Product = require('../models/Product');
  * @returns {void} Sends a JSON response with all products or an error message.
  */
 exports.GetAllProducts = (req, res, next)=>{
-    Product.find()
+    const limit = req.params.lmt ? req.params.lmt : 0;
+
+    StoreProduct.find({shopId : req.shopId}).limit(limit).populate('product')
         .then(products => {
             if(!products || products.length === 0) {
                 res.status(404).send('No product found');
@@ -28,19 +56,14 @@ exports.GetAllProducts = (req, res, next)=>{
  * @param {Function} next - Express next middleware function.
  * @returns {void} Sends a JSON response with the product or an error message.
  */
-exports.GetOneProduct = (req, res, next)=>{
+exports.GetOneProduct = async (req, res, next)=>{
     const productSKU = req.params.sku; // Extract SKU from request parameters
-
-    Product.findOne({ SKU: productSKU })
-    .then(product => {
-
-        if(!product) {
-            res.status(404).json({message : 'Product not found'});
-        }else{
-            res.status(200).json(product);
-        }
-    })
-    .catch(error => res.status(400).json({ message : 'Server error', error : error.message }));
+    const Product = await GetProductBySKU(productSKU)
+    if(!Product){
+        res.status(404).json({message: "Product not found"});
+    } else {
+        res.status(200).json(Product);
+    }
 };
 
 /**
@@ -53,28 +76,41 @@ exports.GetOneProduct = (req, res, next)=>{
  */
 exports.CreateProduct = (req, res, next)=>{
 
-    const SKU = req.params.sku;
+    try {
 
-    Product.findOne({ SKU: SKU })
-        .then(existingProduct => {
-            if(existingProduct) {
-                return res.status(400).json({message : 'Product already exists'});
-            }
+        const newProduct = {
+            name: req.body.name,
+            category: req.body.category,
+            SKU : req.body.sku,
+            price: req.body.price,
+            details: req.body.details,
+            image: req.body.image,
+        };
 
-            const newProduct = new Product({
-                ...req.body,
-                Update: Date.now(),
+        const newProductStore = {
+            shopId: req.body.shopId,
+            slot: req.body.slot,
+            current_stock: req.body.current_stock,
+            reorder_level: req.body.reorder_level,
 
-            });
-            newProduct.save()
-                .then(() => {
-                    res.status(201).json({ message: 'Product created successfully'});
-                })
-                .catch(error => {
-                    res.status(500).json({ message: 'Error saving the product', error: error.message });
-                });
-        })
-        .catch(error => res.status(400).json({ message : 'Server error', error : error.message }));
+        }
+
+        Product.create(newProduct)
+            .then(product => {
+                newProduct.product = product._id;
+                StoreProduct.create(newProductStore)
+                    .then(product => {
+                        res.status(201).json({message: "Product create successfully"})
+                    })
+                    .catch(err => {})
+            })
+            .catch(err => {})
+
+    }catch (err){
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+
+
 };
 
 /**
@@ -89,7 +125,7 @@ exports.UpdateProduct = (req, res, next) => {
     const productSKU = req.params.sku; // Extract SKU from request parameters
     const updatedData = req.body; // Extract updated product data from request body
 
-    Product.findOneAndUpdate({ SKU: productSKU }, updatedData, { new: true, runValidators: true })
+    StoreProduct.findOneAndUpdate({ SKU: productSKU }, updatedData, { new: true, runValidators: true })
         .then(updatedProduct => {
             if (!updatedProduct) {
                 return res.status(404).json({ message: 'Product not found' });
@@ -113,7 +149,7 @@ exports.UpdateProduct = (req, res, next) => {
 exports.DeleteProduct = (req, res, next)=>{
     const productSKU = req.params.sku;
 
-    Product.findOneAndDelete({ SKU: productSKU })
+    StoreProduct.findOneAndDelete({ SKU: productSKU })
         .then(deletedProduct => {
             if (!deletedProduct) {
                 return res.status(404).json({ message: 'Product not found' });

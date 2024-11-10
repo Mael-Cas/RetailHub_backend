@@ -15,12 +15,13 @@ const UserSchema = mongoose.Schema({
     name: {type: String, required: true},
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
+    shopId: { type: mongoose.Schema.Types.ObjectId, ref:'Store', required: true },
     role: {
-        type: String,
-        enum: ['ADMIN', 'USER'],
-        default: 'USER',
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Role'
     },
-    Create: { type: Date, default: Date.now },
+    create: { type: Date, default: Date.now },
+    invoice : [{type: mongoose.Schema.Types.ObjectId, ref: 'Sale'}],
 })
 
 UserSchema.plugin(Validator)

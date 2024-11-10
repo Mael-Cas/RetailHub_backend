@@ -20,12 +20,10 @@ const ProductSchema = mongoose.Schema({
     category: String,
     SKU : {type: String, unique:true, required: true},
     price: Number,
-    Current_stock: {type: Number, required: true},
-    Reorder_level: Number,
-    Details: String,
-    Update: Date,
-    Image: String,
-    Slot: String
+    details: String,
+    update: Date,
+    image: String,
+
 })
 
 module.exports = mongoose.model('Product', ProductSchema)

@@ -15,9 +15,15 @@ const CustomerSchema = mongoose.Schema({
     name: String,
     email: {type: String, unique: true, required: true},
     phone: {type: String, unique: true, required: true},
-    address: {type: String, required: true},
-    invoice: {type: Boolean, default: false},
+    address: {type: mongoose.Schema.Types.ObjectId, ref: 'Address' ,required: true}
 })
+
+CustomerSchema.pre('remove', async function (next) {
+    if (this.address) {
+        await mongoose.model('Address').findByIdAndDelete(this.address);
+    }
+    next();
+});
 
 CustomerSchema.plugin(Validator);
 
