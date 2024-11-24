@@ -57,13 +57,15 @@ exports.GetAllProducts = (req, res, next)=>{
  * @returns {void} Sends a JSON response with the product or an error message.
  */
 exports.GetOneProduct = async (req, res, next)=>{
-    const productSKU = req.params.sku; // Extract SKU from request parameters
-    const Product = await GetProductBySKU(productSKU)
-    if(!Product){
-        res.status(404).json({message: "Product not found"});
-    } else {
-        res.status(200).json(Product);
-    }
+
+    StoreProduct.findOne({productSKU: req.params.sku, shopId: req.auth.shopId}).populate('product')
+        .then(result=>{
+            res.status(200).json(result);
+        })
+        .catch(()=>{
+            res.status(404).send('No product found');
+        })
+
 };
 
 /**
@@ -97,14 +99,14 @@ exports.CreateProduct = (req, res, next)=>{
 
         Product.create(newProduct)
             .then(product => {
-                newProduct.product = product._id;
+                newProduct.productSKU = product.SKU;
                 StoreProduct.create(newProductStore)
-                    .then(product => {
+                    .then(() => {
                         res.status(201).json({message: "Product create successfully"})
                     })
-                    .catch(err => {})
+                    .catch(err => {res.status().json({message: "Server error", error: err})})
             })
-            .catch(err => {})
+            .catch(err => {res.status().json({message: "Server error", error: err})})
 
     }catch (err){
         res.status(500).json({ message: 'Server error', error: err.message });
@@ -122,20 +124,9 @@ exports.CreateProduct = (req, res, next)=>{
  * @returns {void} Sends a JSON response with success or error message.
  */
 exports.UpdateProduct = (req, res, next) => {
-    const productSKU = req.params.sku; // Extract SKU from request parameters
-    const updatedData = req.body; // Extract updated product data from request body
-
-    StoreProduct.findOneAndUpdate({ SKU: productSKU }, updatedData, { new: true, runValidators: true })
-        .then(updatedProduct => {
-            if (!updatedProduct) {
-                return res.status(404).json({ message: 'Product not found' });
-            }
-
-            res.status(200).json({ message: 'Product updated successfully' });
-        })
-        .catch(error => {
-            res.status(500).json({ message: 'Server error', error: error.message });
-        });
+    StoreProduct.findOneAndUpdate({_id : req.params.id}, req.body)
+        .then(()=>{res.status(200).json({message: "Product update successfully"})})
+        .catch((err)=>{res.status(500).json({message:"Server error", error: err})})
 };
 
 /**
@@ -147,9 +138,9 @@ exports.UpdateProduct = (req, res, next) => {
  * @returns {void} Sends a JSON response with success or error message.
  */
 exports.DeleteProduct = (req, res, next)=>{
-    const productSKU = req.params.sku;
 
-    StoreProduct.findOneAndDelete({ SKU: productSKU })
+
+    StoreProduct.deleteOne(req.params.id)
         .then(deletedProduct => {
             if (!deletedProduct) {
                 return res.status(404).json({ message: 'Product not found' });

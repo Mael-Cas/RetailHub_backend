@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Address = require('../models/Address');
 const Validator = require('mongoose-unique-validator');
 
 /**
@@ -18,12 +19,22 @@ const CustomerSchema = mongoose.Schema({
     address: {type: mongoose.Schema.Types.ObjectId, ref: 'Address' ,required: true}
 })
 
-CustomerSchema.pre('remove', async function (next) {
-    if (this.address) {
-        await mongoose.model('Address').findByIdAndDelete(this.address);
+CustomerSchema.pre('deleteOne', async function (next) {
+    try {
+        // Récupère le document du client à supprimer
+        const customer = await this.model.findOne(this.getQuery());
+
+        if (customer) {
+            // Supprime l'adresse associée dans le modèle Address
+            await Address.findByIdAndDelete(customer.address);
+        }
+
+        next();
+    } catch (error) {
+        next(error);
     }
-    next();
 });
+
 
 CustomerSchema.plugin(Validator);
 

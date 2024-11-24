@@ -1,5 +1,5 @@
 const Customer = require('../models/Customer');
-const Addres = require('../models/Address');
+const Address = require('../models/Address');
 
 /**
  * Retrieves all customers from the database.
@@ -58,7 +58,7 @@ exports.CreateCustomer = (req, res, next) => {
     delete req.body._id;
 
 
-    const newAddress = new Addres({
+    const newAddress = new Address({
         street_Number,
         street,
         city,
@@ -93,9 +93,27 @@ exports.CreateCustomer = (req, res, next) => {
  */
 exports.UpdateCustomer = (req, res, next) => {
 
-    Customer.updateOne({ _id: req.params.id }, {...req.body, _id: req.params.id })
-        .then(() => res.status(200).json({message: 'Customer updated successfully.'}))
-        .catch(error => res.status(400).json({ message: 'Server error', error: error.message }));
+    Customer.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true, runValidators: true }
+    )
+        .then(customer => {
+            if (!customer) {
+                return res.status(404).json({ message: 'Customer not found.' });
+            }
+            res.status(200).json({
+                message: 'Customer updated successfully.',
+                customer
+            });
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: 'Server error.',
+                error: error.message
+            });
+        });
+
 
 };
 
@@ -117,7 +135,7 @@ exports.DeleteCustomer = async (req, res, next) => {
         }
 
         // Supprimer le client, ce qui déclenche le middleware pour supprimer l'adresse associée
-        await customer.remove();
+        await customer.deleteOne();
 
         res.status(200).json({ message: 'Customer and associated address deleted successfully.' });
     } catch (error) {

@@ -5,7 +5,7 @@ const StorePSchema = new mongoose.Schema({
     slot: String,
     current_stock: {type: Number, required: true},
     reorder_level: Number,
-    product: {type: mongoose.Schema.Types.ObjectId, ref: 'Product'},
+    productSKU: {type: String, ref: 'Product'},
 })
 
 module.exports = mongoose.model('StoreProduct', StorePSchema);

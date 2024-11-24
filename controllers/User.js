@@ -48,7 +48,10 @@ exports.CreateUser = (req, res, next) => {
                 email: req.body.email,
                 password: hash,
                 name: req.body.name,
-                role: req.body.role
+                role: req.body.role,
+                shopId: req.auth.shopId,
+                invoice: []
+
             });
             user.save()
                 .then(()=>res.status(201).json({message: 'User saved successfully.'}))
@@ -93,7 +96,7 @@ exports.Login = (req, res)=>{
     const email = req.body.email;
     const password = req.body.password;
 
-    console.log(email, password)
+
 
     User.findOne({ email })
         .then(user => {

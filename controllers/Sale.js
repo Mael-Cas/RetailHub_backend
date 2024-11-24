@@ -1,5 +1,6 @@
 const Sale = require('../models/Sale');
 const Product = require('../models/Product');
+const StoreProduct = require('../models/StoreProduct');
 
 
 /**
@@ -11,7 +12,7 @@ const Product = require('../models/Product');
  * @returns {void} Sends a JSON response with sales or an error message.
  */
 exports.GetAllSales = (req, res, next) => {
-    const { years, months, weeks, year, week: weekParam } = req.query;  // Ajout de 'year' et 'week' dans les paramètres
+    const { years, months, weeks, year, week: weekParam, limit, } = req.query;  // Ajout de 'year' et 'week' dans les paramètres
 
     const isYears = years === 'true';
     const isMonth = months === 'true';
@@ -21,6 +22,9 @@ exports.GetAllSales = (req, res, next) => {
     let groupStage = {};
     let matchStage = {};
 
+    if(req.auth.shopId){
+        matchStage.shopId = req.auth.shopId;
+    }
 
     if (isYears) {
         groupStage = {
@@ -81,6 +85,10 @@ exports.GetAllSales = (req, res, next) => {
         );
     }
 
+    if (limit) {
+        pipeline.push({ $limit: parseInt(limit) });
+    }
+
 
     Sale.aggregate(pipeline.length > 0 ? pipeline : [{ $match: {} }])
         .then(sales => {
@@ -124,10 +132,10 @@ exports.CreateSale = (req, res, next) => {
 
 
     const checkStockPromises = products.map(product => {
-        return Product.findOne({ SKU: product.SKU })
+        return StoreProduct.findOne({ productSKU: product.SKU })
             .then(StockProduct => {
                 // Vérification si la quantité demandée dépasse le stock disponible
-                if (product.quantity > StockProduct.Current_stock) {
+                if (product.quantity > StockProduct.current_stock) {
                     valid = false;
                     return Promise.reject(new Error(`Not enough stock for product SKU: ${product.SKU}`));
                 } else {
@@ -143,9 +151,9 @@ exports.CreateSale = (req, res, next) => {
                 const updateStockPromises = results.map(({ product, StockProduct }) => {
                     StockProduct.Current_stock -= product.quantity;
 
-                    return Product.findByIdAndUpdate(
+                    return StoreProduct.findByIdAndUpdate(
                         { _id: StockProduct._id },
-                        { Current_stock: StockProduct.Current_stock, Update: Date.now() }
+                        { Current_stock: StockProduct.current_stock, Update: Date.now() }
                     ).then(() => {
                         console.log(`Product SKU: ${product.SKU} updated`);
                     });
@@ -155,6 +163,7 @@ exports.CreateSale = (req, res, next) => {
                 return Promise.all(updateStockPromises).then(() => {
                     const NewSale = new Sale({
                         ...req.body,
+                        shopId : req.auth.shopId
                     });
 
                     return NewSale.save()
