@@ -11,6 +11,7 @@ const jwt = require('jsonwebtoken');
  * @returns {void} Sends a JSON response with all users or an error message.
  */
 exports.GetAllUsers = (req, res, next) => {
+
     User.find()
         .then(users => res.status(200).json(users))
         .catch(error => res.status(500).json(error));

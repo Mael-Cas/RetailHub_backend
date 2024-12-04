@@ -37,7 +37,7 @@ async function GetProductBySKU(SKU) {
 exports.GetAllProducts = (req, res, next)=>{
     const limit = req.params.lmt ? req.params.lmt : 0;
 
-    StoreProduct.find({shopId : req.shopId}).limit(limit).populate('product')
+    StoreProduct.find({shopId : req.auth.shopId}).limit(limit).populate('product')
         .then(products => {
             if(!products || products.length === 0) {
                 res.status(404).send('No product found');

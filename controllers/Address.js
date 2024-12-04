@@ -35,10 +35,13 @@ exports.CreateAddress = (req, res, next) =>{
 }
 
 exports.UpdateAddress = (req, res, next) =>{
-    Address.findOneAndUpdate({_id:req.params.id})
-        .then(()=>res.status())
+    Address.findOneAndUpdate({_id:req.params.id}, {...req.body, _id:req.params.id})
+        .then(()=>res.status(400).json({message: 'Address updated successfully.'}))
+        .catch((err)=>res.status(500).json(err))
 }
 
 exports.DeleteAddress = (req, res, next) =>{
-
+    Address.findOneAndDelete({_id:req.params.id})
+        .then(()=>res.status(200).json({message: 'Address delete successfully.'}))
+        .catch((err)=>res.status(400).json(err))
 }

@@ -12,4 +12,4 @@ const roleSchema = new mongoose.Schema({
     shopId : { type: mongoose.Schema.Types.ObjectId, ref:'Store'}
 });
 
-const Role = mongoose.model('Role', roleSchema);
+module.exports = mongoose.model('Role', roleSchema);

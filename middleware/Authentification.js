@@ -8,10 +8,12 @@ exports.Auth = (req, res, next) => {
         const decoded = jwt.verify(token, 'TOKEN');
         const userId = decoded.id;
         const role = decoded.roles;
+        const shopId = decoded.shopId
 
         req.auth = {
             userId: userId,
-            role: role
+            role: role,
+            shopId: shopId,
         };
 
         next();

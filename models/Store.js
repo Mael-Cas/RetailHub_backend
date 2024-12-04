@@ -6,8 +6,6 @@ const StoreSchema = new mongoose.Schema({
     phone: String,
     email: String,
     managerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
-})
+},{timestamps: true})
 
 module.exports = mongoose.model('Store', StoreSchema)
