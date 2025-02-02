@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const StoreProduct = require('./StoreProduct')
 
 /**
  * Product Schema defines the structure of the Product documents in the database.
@@ -25,6 +26,13 @@ const ProductSchema = mongoose.Schema({
     image: String,
 
 })
+ProductSchema.pre('findOneAndDelete', async function (next) {
+    const product = await this.model.findOne(this.getQuery());
+    if (product) {
+        await StoreProduct.deleteMany({ productSKU: product.SKU });
+    }
+    next();
+});
 
 
 

@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken')
 
 exports.Auth = (req, res, next) => {
     try {
+
         const token = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(token, 'TOKEN');
         const userId = decoded.id;
-        const role = decoded.roles;
+        const role = decoded.role;
         const shopId = decoded.shopId
-
         req.auth = {
             userId: userId,
             role: role,
@@ -25,7 +25,7 @@ exports.Auth = (req, res, next) => {
 exports.Permission = (resource, field, action) => async (req, res, next) => {
     try {
         const user = await User.findById(req.userId).populate('roles');
-        const organizationId = req.shopId;
+        const organizationId = req.auth.shopId;
 
         if (!user || user.storeID.toString() !== organizationId.toString()) {
             return res.status(403).json({ message: 'Unauthorized access.' });

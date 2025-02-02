@@ -46,17 +46,9 @@ exports.GetOneCustomer = (req, res, next) => {
  */
 exports.CreateCustomer = (req, res, next) => {
 
-    const {street_Number, street, city, state, country, countryCode} = req.body;
+    const {street_Number, street, city, state, country, countryCode} = req.body.address;
 
-    delete req.street_Number;
-    delete req.street;
-    delete req.city;
-    delete req.state;
-    delete req.country;
-    delete req.countryCode;
-
-    delete req.body._id;
-
+    delete req.body.address;
 
     const newAddress = new Address({
         street_Number,

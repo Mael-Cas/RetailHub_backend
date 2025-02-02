@@ -50,7 +50,7 @@ exports.CreateUser = (req, res, next) => {
                 password: hash,
                 name: req.body.name,
                 role: req.body.role,
-                shopId: req.auth.shopId,
+                shopId: req.body.shopId,
                 invoice: []
 
             });
@@ -112,7 +112,8 @@ exports.Login = (req, res)=>{
                         res.status(201).json({
                             userId: user._id,
                             userRole: user.role,
-                            token: jwt.sign({userId: user._id, roles: user.role}, 'TOKEN', {expiresIn: '24h'})
+                            shopId: user.shopId,
+                            token: jwt.sign({userId: user._id, roles: user.role, shopId: user.shopId}, 'TOKEN', {expiresIn: '24h'})
                         });
                     }
                 })

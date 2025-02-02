@@ -1,4 +1,4 @@
-const Address = require('models/Address')
+const Address = require('../models/Address')
 
 
 exports.GetAllAddress = (req, res, next) =>{
@@ -8,7 +8,7 @@ exports.GetAllAddress = (req, res, next) =>{
 }
 
 exports.GetAddress = (req, res, next) =>{
-    Address.find({_id: req.params._id})
+    Address.findOne({_id: req.params.id})
         .then((result) => res.status(200).json(result))
         .catch((err)=> res.status(500).json(err))
 }

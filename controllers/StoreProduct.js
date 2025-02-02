@@ -1,13 +1,25 @@
 const StoreProduct = require('../models/StoreProduct');
+const mongoose = require('mongoose');
 
-exports.GetAllSProduct = (req,res)=>{
-    StoreProduct.find({shopId: req.auth.shopId})
-        .then(data=>{res.status(200).json({data})})
-    .catch(err=>{res.status(500).json({error:err.message})})
+exports.GetAllSProduct = async (req,res)=>{
+    const limit = req.query.lmt ? req.query.lmt : 0;
+    StoreProduct.find().limit(limit).populate({
+        path: 'productSKU', // Nom du champ à peupler
+        model: 'Product',   // Nom du modèle à lier
+        localField: 'productSKU', // Champ dans StorePSchema
+        foreignField: 'SKU',      // Champ dans ProductSchema
+    })
+        .then(products => res.status(200).json(products))
+    .catch(error => res.status(500).json(error));
 }
 
 exports.GetSProduct = (req,res)=>{
-    StoreProduct.findOne({shopId: req.auth.shopId, _id: req.params.id})
+    StoreProduct.findOne({shopId: req.auth.shopId, _id: req.params.id}).populate({
+        path: 'productSKU', // Nom du champ à peupler
+        model: 'Product',   // Nom du modèle à lier
+        localField: 'productSKU', // Champ dans StorePSchema
+        foreignField: 'SKU',      // Champ dans ProductSchema
+    })
         .then(data=>{res.status(200).json({data})})
         .catch(err=>{res.status(500).json({error:err.message})})
 }

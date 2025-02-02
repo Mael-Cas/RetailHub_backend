@@ -16,6 +16,7 @@ exports.GetRole = (req, res) => {
 
 exports.CreateRole = (req, res) => {
     const {name, permissions} = req.body;
+    console.log("Permissions:", JSON.stringify(permissions, null, 2));
 
     const newRole = new Role({
         name,

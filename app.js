@@ -7,9 +7,13 @@ const AlertRouter = require('./routers/Restock_alert');
 const SaleRouter = require('./routers/Sale');
 const ProductRouter = require('./routers/Product');
 const CategoryRouter = require('./routers/Category');
+const AddressRouter = require('./routers/Address');
+const RoleRouter = require('./routers/Role');
+const StoreRouter = require('./routers/Store');
+const StoreProductRouter = require('./routers/StoreProduct');
 
 
-mongoose.connect(`mongodb://127.0.0.1:27017/testRetail`)
+mongoose.connect(`mongodb://${process.env.DB_HOST}/testRetail`)
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
@@ -28,6 +32,9 @@ app.use('/api/products', ProductRouter);
 app.use('/api/customers', CustomerRouter);
 app.use('/api/alerts', AlertRouter);
 app.use('/api/categories', CategoryRouter );
-
+app.use('/api/address', AddressRouter);
+app.use('/api/roles', RoleRouter);
+app.use('/api/stores', StoreRouter);
+app.use('/api/store/products', StoreProductRouter);
 
 module.exports = app;
