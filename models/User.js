@@ -15,7 +15,7 @@ const UserSchema = mongoose.Schema({
     name: {type: String, required: true},
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
-    shopId: { type: mongoose.Schema.Types.ObjectId, ref:'Store', required: true },
+    shopId: { type: mongoose.Schema.Types.ObjectId, ref:'Store' },
     role: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Role'

@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const User = require('./models/User')
 const UserRouter = require('./routers/User');
 const CustomerRouter = require('./routers/Customer');
 const AlertRouter = require('./routers/Restock_alert');
@@ -16,8 +18,34 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 
 
-mongoose.connect(`mongodb://${process.env.DB_HOST}/testRetail`)
-    .then(() => console.log('Connexion à MongoDB réussie !'))
+const createDefaultAdmin = async () => {
+    try {
+        const adminExists = await User.find();
+        if (adminExists.length === 0) {
+            const hashedPassword = await bcrypt.hash('admin123', 10); // Change le mot de passe après déploiement
+            const adminUser = new User({
+                name: 'admin',
+                email: 'admin@example.com',
+                password: hashedPassword,
+            });
+
+            await adminUser.save();
+            console.log("Admin créé avec succès !");
+        } else {
+            console.log("Un admin existe déjà.");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la création de l'admin :", error);
+    }
+};
+
+
+
+mongoose.connect(`mongodb://${process.env.DB_HOST ?? "localhost"}/testRetail`)
+    .then(() => {
+        createDefaultAdmin()
+        console.log('Connexion à MongoDB réussi !')
+    })
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
